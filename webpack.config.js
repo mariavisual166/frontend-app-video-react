@@ -7,6 +7,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+    "publicPath": '/',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -31,20 +32,36 @@ module.exports = {
       {
         test: /\.(s*)css$/,
         use: [
-          { loader: MiniCssExtractPlugin.loader },
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
           'css-loader',
-          'sass-loader',
-        ],
-      }, 
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.(png|gif|jpg)$/,
+        use: [
+          {
+            'loader': 'file-loader',
+            options: {
+              name: 'assets/[hash].[ext]',
+            },
+          },
+        ]
+      }
     ],
   },
+  devServer: {
+    historyApiFallback: true,
+  },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'assets/[name].css',
-    }),
     new HtmlWebPackPlugin({
       template: './public/index.html',
       filename: './index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'assets/[name].css',
     }),
   ],
 };
